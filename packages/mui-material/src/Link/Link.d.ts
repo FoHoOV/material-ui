@@ -6,6 +6,11 @@ import { Theme } from '../styles';
 import { TypographyOwnProps } from '../Typography';
 import { LinkClasses } from './linkClasses';
 
+export interface LinkComponentOverride { }
+
+type DefaultComponent = 
+          LinkComponentOverride extends { component: React.ElementType } ? LinkComponentOverride["component"] : "a"
+
 export interface LinkOwnProps extends DistributiveOmit<LinkBaseProps, 'classes'> {
   /**
    * The content of the component.
@@ -40,7 +45,7 @@ export interface LinkOwnProps extends DistributiveOmit<LinkBaseProps, 'classes'>
   variant?: TypographyOwnProps['variant'];
 }
 
-export interface LinkTypeMap<AdditionalProps = {}, RootComponent extends React.ElementType = 'a'> {
+export interface LinkTypeMap<AdditionalProps = {}, RootComponent extends React.ElementType = DefaultComponent> {
   props: AdditionalProps & LinkOwnProps;
   defaultComponent: RootComponent;
 }
@@ -65,10 +70,10 @@ export type LinkBaseProps = DistributiveOmit<
 >;
 
 export type LinkProps<
-  RootComponent extends React.ElementType = LinkTypeMap['defaultComponent'],
+  RootComponent extends React.ElementType = DefaultComponent,
   AdditionalProps = {},
 > = OverrideProps<LinkTypeMap<AdditionalProps, RootComponent>, RootComponent> & {
-  component?: React.ElementType;
+  component?: React.ReactElement;
 };
 
 export default Link;
